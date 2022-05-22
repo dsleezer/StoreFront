@@ -31,8 +31,33 @@ namespace StoreFront.UI.MVC.Controllers
             return View(await storeFrontContext.ToListAsync());
         }
 
+        public async Task<IActionResult> TileView()
+        {
+            var storeFrontContext = _context.Products.Include(p => p.ProductType).Include(p => p.StockStatus).Include(p => p.Supplier).Include(p => p.OrderProducts).Include(p => p.Games);
+            return View(await storeFrontContext.ToListAsync());
+        }
+
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.Products == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _context.Products
+                .Include(p => p.ProductType)
+                .Include(p => p.StockStatus)
+                .Include(p => p.Supplier)
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+        public async Task<IActionResult> StyledDetails(int? id)
         {
             if (id == null || _context.Products == null)
             {
@@ -145,8 +170,10 @@ namespace StoreFront.UI.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,Price,Description,UnitsInStock,UnitsOnOrder,IsActive,SupplierId,PhotoUrl,StockStatusId,ProductTypeId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,Price,Description,UnitsInStock,UnitsOnOrder,IsActive,SupplierId,PhotoUrl,StockStatusId,ProductTypeId,Image")] Product product)
         {
+            string oldImageName = product.PhotoUrl;
+
             if (id != product.ProductId)
             {
                 return NotFound();
@@ -154,6 +181,41 @@ namespace StoreFront.UI.MVC.Controllers
 
             if (ModelState.IsValid)
             {
+                if(product.Image != null)
+                {
+                    string ext = Path.GetExtension(product.Image.FileName); 
+                    string[] validExts = { ".jpeg", ".jpg", ".gif", ".png" };
+
+                    if (validExts.Contains(ext.ToLower()) && product.Image.Length < 4_194_303)
+                    {
+                        product.PhotoUrl = Guid.NewGuid() + ext;
+
+                        string webRootPath = _webHostEnvironment.WebRootPath;
+                        string fullPath = webRootPath + "/img/";
+
+                        if (oldImageName != "noImage.png")
+                        {
+                            ImageUtility.Delete(fullPath, oldImageName);
+                        }
+
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await product.Image.CopyToAsync(memoryStream);
+                            using (var img = Image.FromStream(memoryStream))
+                            {
+                                int maxImageSize = 500;
+                                int maxThumbSize = 100;
+                                ImageUtility.ResizeImage(fullPath, product.PhotoUrl, img, maxImageSize, maxThumbSize);
+                            }
+                        }
+                    }
+                }
+
+
+
+
+
+
                 try
                 {
                     _context.Update(product);

@@ -130,8 +130,8 @@ namespace StoreFront.DATA.EF.Models
     {
         //PK
         public int ProductTypeId { get; set; }
-        [Required(ErrorMessage = "Product Type Name is required")]
-        [Display(Name = "Product Type Name")]
+        [Required(ErrorMessage = "Category Name is required")]
+        [Display(Name = "Category")]
         public string TypeName { get; set; } = null!;
 
     }
@@ -144,7 +144,7 @@ namespace StoreFront.DATA.EF.Models
         //PK
         public int StockStatusId { get; set; }
         [Required(ErrorMessage = "Stock Status Name is required")]
-        [Display(Name = "Status Name")]
+        [Display(Name = "Availability")]
         public string StatusName { get; set; } = null!;
 
     }

@@ -53,35 +53,34 @@
                             <a class="nav-link" href="@Url.Action("Index", "Home")">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "Products")">Shop All</a>
+                            <a class="nav-link" href="@Url.Action("TileView", "Products")">Shop All</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="@Url.Action("Index", "Games")">Shop Games</a>
                         </li>
-                        @*@if (User.IsInRole("Admin"))
-                            {*@
-                        <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Toggle navigation">Product Management <span class="carat"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="@Url.Action("Index", "GameTypes")">Game Types</a></li>
-                                <li><a class="dropdown-item" href="@Url.Action("Index", "Genres")">Genres</a></li>
-                                <li><a class="dropdown-item" href="@Url.Action("Index", "Orders")">Orders</a></li>
-                                <li><a class="dropdown-item" href="@Url.Action("Index", "Products")">Products</a></li>
-                                <li><a class="dropdown-item" href="@Url.Action("Index", "ProductTypes")">Product Types</a></li>
-                                <li><a class="dropdown-item" href="@Url.Action("Index", "StockStatus")">Stock Status</a></li>
-                                <li><a class="dropdown-item" href="@Url.Action("Index", "Suppliers")">Suppliers</a></li>
-                            </ul>
-                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Toggle navigation">Product Management <span class="carat"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "GameTypes")">Game Types</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Genres")">Genres</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Orders")">Orders</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Products")">Products</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "ProductTypes")">Product Types</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "StockStatus")">Stock Status</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Suppliers")">Suppliers</a></li>
+                                </ul>
+                            </li>
 
-                        <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Toggle navigation">User Management <span class="carat"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="@Url.Action("ListUsers", "Administration")">Users</a></li>
-                                <li><a class="dropdown-item" href="@Url.Action("ListRoles", "Administration")">Roles</a></li>
-                            </ul>
-                        </li>
-
-                        @*    }*@
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Toggle navigation">User Management <span class="carat"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="@Url.Action("ListUsers", "Administration")">Users</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("ListRoles", "Administration")">Roles</a></li>
+                                </ul>
+                            </li>
+                        }
 
                         <li class="nav-item">
                             <a class="nav-link" href="contact.html">Contact</a>
@@ -100,33 +99,47 @@
 
                     </ul>
                 </div>
-                @*                <div class="navbar align-self-center d-flex">
+                <div class="navbar align-self-center d-flex">
                     <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
-                    <div class="input-group">
-                    <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
-                    <div class="input-group-text">
-                    <i class="fa fa-fw fa-search"></i>
-                    </div>
-                    </div>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
+                            <div class="input-group-text">
+                                <i class="fa fa-fw fa-search"></i>
+                            </div>
+                        </div>
                     </div>
                     <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#templatemo_search">
-                    <i class="fa fa-fw fa-search text-dark mr-2"></i>
+                        <i class="fa fa-fw fa-search text-dark mr-2"></i>
                     </a>
                     <a class="nav-icon position-relative text-decoration-none" href="#">
-                    <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                    <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">7</span>
+                        <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">7</span>
                     </a>
-                    <a class="nav-icon position-relative text-decoration-none" href="#">
-                    <i class="fa fa-fw fa-user text-dark mr-3"></i>
-                    <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>
-                    </a>
-                    </div>
-                *@
+                </div>
+
             </div>
 
         </div>
     </nav>
     <!-- Close Header -->
+    <!-- Modal -->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
     @RenderBody()
 
     <!-- Start Footer -->
