@@ -4,13 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
 
 @if (User.IsInRole("Admin"))
 {
-<p>
-    <a asp-action="Create">Create New</a>
-</p>    
+    <p>
+        <a class="btn btn-primary mt-2" asp-action="Create">Create New</a>
+    </p>
 }
 
 <table class="table">
@@ -75,7 +74,7 @@
                 *@
                 <td>
                     @*@Html.DisplayFor(modelItem => item.PhotoUrl)*@
-                    <img src="~/img/@item.PhotoUrl" class="img-fluid" alt=@item.Description />
+                    <img src="~/img/t_@item.PhotoUrl" class="img-fluid" alt=@item.Description />
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ProductType.TypeName)
@@ -97,7 +96,7 @@
                     else
                     {
                         <a dsiabled="disabled" class="text-danger text-decoration-line-through"
-                        title="Cannot delete this Gadget as it is referenced by an Order">Delete</a>
+                   title="Cannot delete this Gadget as it is referenced by an Order">Delete</a>
                     }
 
                 </td>
@@ -105,3 +104,10 @@
         }
     </tbody>
 </table>
+
+@section Scripts{
+<script>
+    $(document).ready( function () {
+    $('.table').DataTable();});
+</script>
+}

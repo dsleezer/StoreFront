@@ -1,5 +1,6 @@
-﻿@model IEnumerable<StoreFront.DATA.EF.Models.Product>
-
+﻿@model IPagedList<StoreFront.DATA.EF.Models.Product>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
 @{
     ViewData["Title"] = "Products Tile View";
 }
@@ -16,98 +17,104 @@
 <div class="container py-5">
     <div class="row">
 
-        <div class="col-lg-3">
+        @*        <div class="col-lg-3">
+            <form asp-action="TileView" method="get">
             <ul class="list-unstyled templatemo-accordion">
-                <li class="pb-3">
-                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
-                        Categories
-                        <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
-                    </a>
-                    <ul class="collapse show list-unstyled pl-3">
-                        <li><a class="text-decoration-none" href="#">Games</a></li>
-                        <li><a class="text-decoration-none" href="#">Miniatures</a></li>
-                        <li><a class="text-decoration-none" href="#">Dice</a></li>
-                        <li><a class="text-decoration-none" href="#">Accessories</a></li>
-                    </ul>
-                </li>
+            <li class="pb-3">
+            <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
+            Categories
+            <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
+            </a>
+            <ul class="collapse show list-unstyled pl-3">
+
+            @foreach (var item in Model.Any(p => p.ProductType.TypeName))
+            {
+            <li><a name="productTypeId" class="text-decoration-none" asp-items="ViewBag.ProductTypeId">@item.ProductType.TypeName
+
+            </a>
+            </li>
+
+            }
             </ul>
+            </li>
+            </ul>
+            </form>
+            </div>*@
+
+        <div class="col-lg-12">
+            <div class="row">
+                <form asp-action="TileView" method="get">
+
+                    <ul class="list-inline shop-top-menu pb-2 pt-1">
+                        <li class="list-inline-item">
+                            <input name="searchTerm" class="form-control" placeholder="Search..." />
+                        </li>
+                        <li class="list-inline-item">
+                            @* Main Filter *@
+                            <select name="productTypeId" class="form-control d-flex" asp-items="ViewBag.ProductTypeId">
+                                <option value="0">[Category]</option>
+                            </select>
+                        </li>
+                        <li class="list-inline-item">
+                            <input type="submit" value="Apply Filters" class="btn btn-primary text-center" />
+                        </li>
+                    </ul>
+                </form>
+            </div>
         </div>
 
-        <div class="col-lg-9">
-            <div class="row">
-                <div class="col-md-6">
-                    <ul class="list-inline shop-top-menu pb-3 pt-1">
-                        <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none mr-3" href="#">All</a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none mr-3" href="#">Men's</a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none" href="#">Women's</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-6 pb-4">
-                    <div class="d-flex">
-                        <select class="form-control">
-                            <option>Featured</option>
-                            <option>A to Z</option>
-                            <option>Item</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
+        <hr />
 
-                @foreach (var item in Model)
-                {
-                    <div class="col-md-4">
-                        <div class="card mb-4 product-wap rounded-0">
-                            <div class="card rounded-0">
-                                <img class="card-img rounded-0 img-fluid" src="~/img/@item.PhotoUrl" alt="@item.Description">
-                                <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
-                                    <ul class="list-unstyled">
-                                        <li><a class="btn btn-success text-white" asp-action="StyledDetails" asp-route-id="@item.ProductId"><i class="far fa-heart"></i></a></li>
-                                        <li><a class="btn btn-success text-white mt-2" asp-action="StyledDetails" asp-route-id="@item.ProductId"><i class="far fa-eye"></i></a></li>
-                                        <li><a class="btn btn-success text-white mt-2" asp-action="StyledDetails" asp-route-id="@item.ProductId"><i class="fas fa-cart-plus"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-body text-center">
-                                <a asp-action="StyledDetails" asp-route-id="@item.ProductId" class="h3 text-decoration-none">@item.ProductName</a>
-                                <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
-                                    <li class="pt-2">
-                                        <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
-                                        <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
-                                        <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
-                                        <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
-                                        <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
-                                    </li>
+        <div class="row">
+
+            @foreach (var item in Model)
+            {
+                <div class="col-md-3">
+                    <div class="card mb-4 product-wap rounded-0">
+                        <div class="card rounded-0">
+                            <img class="card-img rounded-0 img-fluid" src="~/img/@item.PhotoUrl" alt="@item.Description">
+                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
+                                <ul class="list-unstyled">
+                                    <li><a class="btn btn-success text-white mt-2" asp-action="StyledDetails" asp-route-id="@item.ProductId"><i class="far fa-eye"></i></a></li>
+                                    <li><a class="btn btn-success text-white mt-2" asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.ProductId"><i class="fas fa-cart-plus"></i></a></li>
                                 </ul>
-                                <p class="text-center mb-0">@Html.DisplayFor(modelItem => item.Price)</p>
                             </div>
                         </div>
+                        <div class="card-body text-center">
+                            <a asp-action="StyledDetails" asp-route-id="@item.ProductId" class="h3 text-decoration-none">@item.ProductName</a>
+                            <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
+                                <li class="pt-2">
+                                    <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-black float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-light float-left rounded-circle ml-1"></span>
+                                    <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
+                                </li>
+                            </ul>
+                            <p class="text-center mb-0">@Html.DisplayFor(modelItem => item.Price)</p>
+                        </div>
                     </div>
+                </div>
 
-                }
+            }
 
-            </div>
-            <div div="row">
-                <ul class="pagination pagination-lg justify-content-end">
-                    <li class="page-item disabled">
-                        <a class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0" href="#" tabindex="-1">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link rounded-0 shadow-sm border-top-0 border-left-0 text-dark" href="#">3</a>
-                    </li>
-                </ul>
-            </div>
         </div>
+        <div class="row mt-5">
+            <div class="col-sm-6">
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                <div class="justify-content-center">
+                    @Html.PagedListPager(Model, page => Url.Action("TileView", new {page, searchTerm = ViewBag.SearchTerm, categoryId = ViewBag.Category}))
+                </div>
+            </div>
 
+        </div>
+        <div class="btn-box">
+            <a class="btn-primary btn" asp-action="TileView">
+                View All products
+            </a>
+        </div>
     </div>
+
+</div>
 </div>
 <!-- End Content -->

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using StoreFront.DATA.EF.Models;
 using System.Drawing;
 using StoreFront.UI.MVC.Utilities;
+using X.PagedList;
 
 namespace StoreFront.UI.MVC.Controllers
 {
@@ -31,10 +32,59 @@ namespace StoreFront.UI.MVC.Controllers
             return View(await storeFrontContext.ToListAsync());
         }
 
-        public async Task<IActionResult> TileView()
+        public async Task<IActionResult> TileView(string searchTerm, int productTypeId = 0, int page = 1)
         {
-            var storeFrontContext = _context.Products.Include(p => p.ProductType).Include(p => p.StockStatus).Include(p => p.Supplier).Include(p => p.OrderProducts).Include(p => p.Games);
-            return View(await storeFrontContext.ToListAsync());
+            int pageSize = 12;
+
+            //TODO figure out how to pull all product type names to populate into a list
+            //ViewBag.TypeName = _context.ProductTypes.Include(p => p.TypeName).ToList();
+
+
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductTypes, "ProductTypeId", "TypeName");
+            ViewBag.ProductType = 0;
+            
+
+            //ALL Products
+            var products = _context.Products.Include(p => p.ProductType).Include(p => p.StockStatus).Include(p => p.Supplier).Include(p => p.OrderProducts)
+                .Include(p => p.Games).ThenInclude(p => p.Genre).Include(p => p.Games).ThenInclude(p => p.GameType).ToList();
+                        
+            //Sort By Products DDL
+            if (productTypeId != 0)
+            {
+                products = products.Where(p => p.ProductTypeId == productTypeId).ToList();
+
+                ViewData["ProductyTypeId"] = new SelectList(_context.ProductTypes, "ProductTypeId", "ProductyTypeName", productTypeId);
+                ViewBag.ProductType = productTypeId;
+            }
+
+            #region Optional Search Filter
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                int searchInt = 0;
+
+                Int32.TryParse(searchTerm, out searchInt);
+
+                products = products.Where(p => p.ProductName.ToLower().Contains(searchTerm.ToLower())
+                                    || p.Description.ToLower().Contains(searchTerm)
+                                    || p.Games.Any(g => g.MinPlayers <= searchInt && g.MaxPlayers >= searchInt)
+                                    || p.Games.Any(g => g.GameType.Name.ToLower().Contains(searchTerm.ToLower()))
+                                    || p.Games.Any(g => g.Genre.Genre1.ToLower().Contains(searchTerm.ToLower()))
+                ).ToList();
+
+                ViewBag.NbrResults = products.Count;
+                ViewBag.SearchTerm = searchTerm;
+            }
+            else
+            {
+                ViewBag.NbrResults = null;
+                ViewBag.NbrResults = null;
+            }
+
+
+            #endregion
+
+
+            return View(products.ToPagedList(page, pageSize));
         }
 
         // GET: Products/Details/5
@@ -59,6 +109,14 @@ namespace StoreFront.UI.MVC.Controllers
         }
         public async Task<IActionResult> StyledDetails(int? id)
         {
+
+            ViewBag.Genres = _context.Genres.Where(x => x.Games.Select(y => y.ProductId).SingleOrDefault() == id);
+
+            ViewBag.GameType = _context.GameTypes.Where(x => x.Games.Select(y => y.ProductId).SingleOrDefault() == id);
+                        
+            //ViewBag.Games = _context.Games.Select(y => y.ProductId).SingleOrDefault() == id;
+          
+
             if (id == null || _context.Products == null)
             {
                 return NotFound();
@@ -68,6 +126,11 @@ namespace StoreFront.UI.MVC.Controllers
                 .Include(p => p.ProductType)
                 .Include(p => p.StockStatus)
                 .Include(p => p.Supplier)
+                .Include(p => p.Games)
+                .ThenInclude(p => p.Genre)
+                .Include(p => p.Games)
+                .ThenInclude(p => p.GameType)
+                
                 .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
@@ -210,11 +273,6 @@ namespace StoreFront.UI.MVC.Controllers
                         }
                     }
                 }
-
-
-
-
-
 
                 try
                 {

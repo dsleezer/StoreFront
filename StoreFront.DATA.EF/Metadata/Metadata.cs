@@ -68,7 +68,7 @@ namespace StoreFront.DATA.EF.Models
         //FK
         public string UserId { get; set; } = null!;
         [Required(ErrorMessage = "* Order Date is Required")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]//0:d => MM/dd/yyyy
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
         [Display(Name = "Order Date")]
         public DateTime OrderDate { get; set; }
         [Required(ErrorMessage = "* Ship To Name is required")]
