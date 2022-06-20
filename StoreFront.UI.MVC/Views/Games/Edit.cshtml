@@ -1,10 +1,10 @@
 ﻿@model StoreFront.DATA.EF.Models.Game
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit " + Model.Product.ProductName;
 }
 
-<h2>Edit</h2>
+<h2>@ViewData["Title"]</h2>
 
 <h4>Game</h4>
 <hr />

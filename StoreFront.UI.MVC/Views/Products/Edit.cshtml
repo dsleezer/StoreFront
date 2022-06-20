@@ -1,12 +1,12 @@
 ﻿@model StoreFront.DATA.EF.Models.Product
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit " + Model.ProductName;
 }
 
 <h2>Edit</h2>
 
-<h4>Product</h4>
+<h4>@ViewData["Title"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">

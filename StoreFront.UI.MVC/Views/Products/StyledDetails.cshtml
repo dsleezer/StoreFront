@@ -3,7 +3,7 @@
 @model StoreFront.DATA.EF.Models.Product
 
 @{
-    ViewData["Title"] = "Styled Details";
+    ViewData["Title"] = @Model.ProductName + " Details";
 }
 
 <!-- Open Content -->
@@ -51,21 +51,20 @@
                             {
                                 <li>@gt.Name</li>
                             }
-                       
+                            <li>
+                                Players: @foreach (var item in Model.Games)
+                                {
+                                    <span>Players: @item.MinPlayers - @item.MaxPlayers</span>
+                                }
+                            </li>
 
-                            <li>Players: @foreach (var item in Model.Games)
-                                                 {
-                                                     <span>@item.MinPlayers - @item.MaxPlayers</span>
-                                                 }</li>
-                            <li>Duis aute irure</li>
-                            <li>Ut enim ad minim</li>
-                            <li>Dolore magna aliqua</li>
-                            <li>Excepteur sint</li>
-                        </ul>+
+
+
+                        </ul>
 
                         <form action="" method="GET">
                             <input type="hidden" name="product-title" value="@Html.DisplayFor(model => model.ProductName)">
-                            <div class="row">
+@*                            <div class="row">
                                 <div class="col-auto">
                                     <ul class="list-inline pb-3">
                                         <li class="list-inline-item text-right">
@@ -77,7 +76,7 @@
                                         <li class="list-inline-item"><span class="btn btn-success" id="btn-plus">+</span></li>
                                     </ul>
                                 </div>
-                            </div>
+                            </div>*@
                             <div class="row pb-3">
                                 <div class="col d-grid">
                                     <button type="submit" class="btn btn-success btn-lg" name="submit" value="buy">Buy</button>

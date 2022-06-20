@@ -273,7 +273,7 @@ namespace StoreFront.UI.MVC.Controllers
                         }
                     }
                 }
-
+                
                 try
                 {
                     _context.Update(product);

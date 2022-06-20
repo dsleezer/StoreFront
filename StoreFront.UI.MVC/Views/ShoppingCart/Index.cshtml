@@ -61,19 +61,14 @@
                                 @item.Value.Product.ProductName
                             </td>
                             <td>
-                                @string.Format($"{item.Value.Product.Price:c}")
-                                @*@item.Value.Product.Price*@
+                                @string.Format($"{item.Value.Product.Price:c}")                                
                             </td>
                             <td>
-                                @{
-                                    //Calculate the line total and the cart total
-                                    //line total will be displayed here for each individual line item
-                                    //cart total will be displayed after all of the line items
+                                @{                                   
                                     decimal? lineTotal = item.Value.Qty * item.Value.Product.Price;
                                     cartTotal += lineTotal;//total for ALL items
                                 }
-                                @string.Format($"{lineTotal:c}")
-                                @lineTotal
+                                @string.Format($"{lineTotal:c}")                                
                             </td>
                             <td>
                                 <a asp-controller="ShoppingCart" asp-action="RemoveFromCart" asp-route-id="@item.Key"

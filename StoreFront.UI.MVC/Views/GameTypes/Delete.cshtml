@@ -1,12 +1,12 @@
 ﻿@model StoreFront.DATA.EF.Models.GameType
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete" + Model.Name;
 }
 
 <h2>Delete</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete @Model.Name? This cannot be undone.</h3>
 <div>
     <h4>GameType</h4>
     <hr />
